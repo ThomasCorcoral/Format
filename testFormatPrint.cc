@@ -12,9 +12,47 @@ namespace my {
   }
 }
 
-TEST(EasyTest, SimpleNoChange){
+TEST(RegularTest, SimpleNoSubstitution){
   auto str = fp::format("The cake is a lie!");
   EXPECT_EQ(str, "The cake is a lie!");
+}
+
+TEST(RegularTest, SubstitutionWithPercentI){
+  auto str = fp::format("The answer is always %i.", 42);
+  EXPECT_EQ(str, "The answer is always 42.");
+}
+
+TEST(RegularTest, SubstitutionWithPercentD){
+  auto str = fp::format("For instance : 1 + 1 = %d", 42);
+  EXPECT_EQ(str, "For instance : 1 + 1 = 42");
+}
+
+TEST(RegularTest, SubstitutionWithPercentF){
+  auto str = fp::format("But What about floats? It's %f, easy.", 42,424242);
+  EXPECT_EQ(str, "But What about floats? It's 42,424242, easy.");
+}
+
+TEST(RegularTest, SubstitutionWithPercentB){
+  auto str = fp::format("Which means, 5*5 = 25 is %b, and 5*5 = 42 is %b", false, true);
+  EXPECT_EQ(str, "Which means, 5*5 = 25 is false, and 5*5 = 42 is true");
+}
+
+TEST(RegularTest, SubstitutionWithPercentC){
+  auto str = fp::format("Is someone says otherwise, just say %c%c", 'n', 'o');
+  EXPECT_EQ(str, "Is someone says otherwise, just say no");
+}
+
+TEST(RegularTest, SubstitutionWithPercentP){
+  int variable = 42;
+  const int *ptr = &variable;
+  auto str = fp::format("Also i just made a variable with the number 42 in it, it's address is %p", &variable);
+  auto str_test = "Also i just made a variable with the number 42 in it, it's address is " ;
+  EXPECT_EQ(str, "Also i just made a variable with the number 42 in it, it's address is %p");
+}
+
+TEST(RegularTest, SubstitutionWithPercentX){
+  auto str = fp::format("Is someone says otherwise, just say %c%c", 'n', 'o');
+  EXPECT_EQ(str, "Is someone says otherwise, just say no");
 }
 
 int main(int argc, char* argv[]) {

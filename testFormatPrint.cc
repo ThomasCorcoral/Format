@@ -45,15 +45,21 @@ TEST(RegularTest, SubstitutionWithPercentC){
 TEST(RegularTest, SubstitutionWithPercentP){
   int variable = 42;
   const int *ptr = &variable;
-  auto str = fp::format("Also i just made a variable with the number 42 in it, it's address is %p", &variable);
-  auto str_test = "Also i just made a variable with the number 42 in it, it's address is " ;
-  EXPECT_EQ(str, "Also i just made a variable with the number 42 in it, it's address is %p");
+  auto str = fp::format("Also I just made a variable with the number 42 in it, it's address is %p", &variable);
+  auto str_test = "Also I just made a variable with the number 42 in it, it's address is " + *ptr;
+  EXPECT_EQ(str, str_test);
+}
+
+TEST(RegularTest, SubstitutionWithPercentPNullptr){
+  auto str = fp::format("Which is not the same as a nullptr, which has the adress %p", nullptr);
+  EXPECT_EQ(str, "Which is not the same as a nullptr, which has the adress 0x0");
 }
 
 TEST(RegularTest, SubstitutionWithPercentX){
-  auto str = fp::format("Is someone says otherwise, just say %c%c", 'n', 'o');
-  EXPECT_EQ(str, "Is someone says otherwise, just say no");
+  auto str = fp::format("By the way, did you know that the hexadecimal representation of 42 is %x", 42);
+  EXPECT_EQ(str, "By the way, did you know that the hexadecimal representation of 42 is 0x2A");
 }
+
 
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);

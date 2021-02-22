@@ -43,11 +43,14 @@ TEST(RegularTest, SubstitutionWithPercentC){
 }
 
 TEST(RegularTest, SubstitutionWithPercentP){
-  int variable = 42;
-  const int *ptr = &variable;
-  auto str = fp::format("Also I just made a variable with the number 42 in it, it's address is %p", &variable);
-  auto str_test = "Also I just made a variable with the number 42 in it, it's address is " + *ptr;
+  int *variable = new int(42);
+  std::ostringstream get_the_address; 
+  get_the_address << variable;
+  std::string address =  get_the_address.str(); 
+  auto str = fp::format("Also I just made a variable with the number 42 in it, it's address is %p", variable);
+  auto str_test = "Also I just made a variable with the number 42 in it, it's address is " + address;
   EXPECT_EQ(str, str_test);
+  delete(variable);
 }
 
 TEST(RegularTest, SubstitutionWithPercentPNullptr){
@@ -57,9 +60,18 @@ TEST(RegularTest, SubstitutionWithPercentPNullptr){
 
 TEST(RegularTest, SubstitutionWithPercentX){
   auto str = fp::format("By the way, did you know that the hexadecimal representation of 42 is %x", 42);
-  EXPECT_EQ(str, "By the way, did you know that the hexadecimal representation of 42 is 0x2A");
+  EXPECT_EQ(str, "By the way, did you know that the hexadecimal representation of 42 is 0x2a");
 }
 
+TEST(RegularTest, SubstitutionWithPercentS){
+  auto str = fp::format("So yeah, 42 is the universal %s", "answer");
+  EXPECT_EQ(str, "So yeah, 42 is the universal answer");
+}
+
+TEST(RegularTest, MultipleSubstitutions){
+  auto str = fp::format("So in the end, when someone asks you %s the time, you just say %d, or %f or %x ", "for", 42, 42.424242, 42);
+  EXPECT_EQ(str, "So in the end, when someone asks you for the time, you just say 42, or 42.424242 or 0x2a");
+}
 
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);

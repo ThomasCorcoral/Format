@@ -68,6 +68,11 @@ TEST(RegularTest, SubstitutionWithPercentS){
   EXPECT_EQ(str, "So yeah, 42 is the universal answer");
 }
 
+TEST(RegularTest, SubstitutionWithMultiplePercents){
+  auto str = fp::format("If you want to print 42 on a computer, you need to use %%i or %%d");
+  EXPECT_EQ(str, "If you want to print 42 on a computer, you need to use %i or %d");
+}
+
 TEST(RegularTest, MultipleSubstitutions){
   auto str = fp::format("So in the end, when someone asks you %s the time, you just say %d, or %f or %x", "for", 42, 42.424242, 42);
   EXPECT_EQ(str, "So in the end, when someone asks you for the time, you just say 42, or 42.424242 or 0x2a");

@@ -42,7 +42,7 @@ namespace fp {
           if(type == 'p'){
             stringFormated += "0x0";
           }else{
-            // ERROR : NO POINTER REQUIRE BUT POINTER GIVEN
+
           }
         }else if constexpr (std::is_pointer<T>::value){
           if(type == 'p'){
@@ -63,40 +63,58 @@ namespace fp {
           switch (type){
             case 'i':
             case 'd':
-              // TODO : Check the type typeid ?
-              stringFormated += std::to_string(value);
+              if(std::is_integral<T>::value){
+                stringFormated += std::to_string(value);
+              }else{
+                // ERROR : NOT AN INTEGER
+              }
               break;
             case 'f':
-              // TODO : Check the type typeid ?
-              stringFormated += std::to_string(value);
+              if(std::is_floating_point<T>::value){
+                stringFormated += std::to_string(value);
+              }else{
+                // ERROR : NOT A FLOAT
+              }
               break;
             case 'b':
-              // TODO : Check the type typeid ?
               if(std::is_same<T,bool>::value){
-                if(value)
+                if(value){
                   stringFormated += "true";
-                else
+                }
+                else{
                   stringFormated += "false";
+                }
+              }else{
+                // ERROR : NOT A BOOLEAN
               }
               break;
             case 's':
-              // TODO : Check the type typeid ?
-              stringFormated += value;
+              if(std::is_same<T,std::string>::value){
+                stringFormated += value;
+              }else{
+                // ERROR : NOT A STRING
+              }
               break;
             case 'c':
-              // TODO : Check the type typeid ?
-              stringFormated += value;
+              if(std::is_same<T,char>::value){
+                stringFormated += value;
+              }else{
+                // ERROR : NOT A CHAR
+              }
               break;
             case 'p':
               // ERROR : Not a pointer !
               break;
             case 'x':{
-              // TODO : Check the type typeid ?
-              std::stringstream stream;
-              stream << std::hex << value;
-              std::string result(stream.str());
-              stringFormated += "0x";
-              stringFormated += result;
+              if(std::is_integral<T>::value){
+                std::stringstream stream;
+                stream << std::hex << value;
+                std::string result(stream.str());
+                stringFormated += "0x";
+                stringFormated += result;
+              }else{
+                // ERROR : NOT AN INTEGER
+              }
               break;
             }
             case '%':

@@ -28,8 +28,8 @@ TEST(RegularTest, SubstitutionWithPercentD){
 }
 
 TEST(RegularTest, SubstitutionWithPercentF){
-  auto str = fp::format("But What about floats? It's %f, easy.", 42,424242);
-  EXPECT_EQ(str, "But What about floats? It's 42,424242, easy.");
+  auto str = fp::format("But what about floats? It's %f, easy.", 42.424242);
+  EXPECT_EQ(str, "But what about floats? It's 42.424242, easy.");
 }
 
 TEST(RegularTest, SubstitutionWithPercentB){

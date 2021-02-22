@@ -7,6 +7,13 @@ namespace fp {
   /**
    * @brief Insert all parameter into a formated string
    */
+/*
+  template<typename T>
+  struct m_is_pointer { static const bool value = false; };
+
+  template<typename T>
+  struct m_is_pointer<T*> { static const bool value = true; };
+*/
   std::string format(const std::string& formatString){
     std::string stringFormated;
     size_t i = 0;
@@ -37,39 +44,65 @@ namespace fp {
 
       if(c == '%'){
         char type = formatString[i+1];
-        switch (type){
-          case 'i':
-          case 'd':
-            // TODO : Check the type typeid ?
-          case 'f':
-            // TODO : Check the type typeid ?
-            break;
-          case 'b':
-            // TODO : Check the type typeid ?
-            if(value){
-              stringFormated += "true";
-            }else{
-              stringFormated += "false";
-            }
-            stringFormated += formatString.substr(i+2,formatString.length());
-            return format(stringFormated, Fargs...);
-            break;
-          case 's':
-            // TODO : Check the type typeid ?
-            break;
-          case 'c':
-            // TODO : Check the type typeid ?
-            break;
-          case 'x':
-            // TODO : Check the type typeid ?
-            break;
-          case '%':
-            stringFormated += type;
-            stringFormated += formatString.substr(i+3,formatString.length());
-            return format(stringFormated, value, Fargs...);
-          default:
-            break;
+        if constexpr (std::is_null_pointer<T>::value){
+          if(type == 'p'){
+            stringFormated += "0x0";
+          }else{
+            // ERROR : NO POINTER REQUIRE BUT POINTER GIVEN
+          }
+        }else if constexpr (std::is_pointer<T>::value){
+          if(type == 'p'){
+            //stringFormated += std::to_string(*value);
+          }else{
+            // ERROR : NO POINTER REQUIRE BUT POINTER GIVEN
+          }
+        }else{
+          switch (type){
+            case 'i':
+            case 'd':
+              // TODO : Check the type typeid ?
+              stringFormated += std::to_string(value);
+              break;
+            case 'f':
+              // TODO : Check the type typeid ?
+              stringFormated += std::to_string(value);
+              break;
+            case 'b':
+              // TODO : Check the type typeid ?
+              if(value){
+                stringFormated += "true";
+              }else{
+                stringFormated += "false";
+              }
+              break;
+            case 's':
+              // TODO : Check the type typeid ?
+                stringFormated += value;
+              break;
+            case 'c':
+              // TODO : Check the type typeid ?
+              stringFormated += value;
+              break;
+            case 'p':
+              // ERROR : Not a pointer !
+              break;
+            case 'x':
+              // TODO : Check the type typeid ?
+              /*std::stringstream stream;
+              stream << std::hex << value;
+              std::string result(stream.str());
+              stringFormated += result;*/
+              break;
+            case '%':
+              stringFormated += type;
+              stringFormated += formatString.substr(i+3,formatString.length());
+              return format(stringFormated, value, Fargs...);
+            default:
+              break;
+          }
         }
+        stringFormated += formatString.substr(i+2,formatString.length());
+        return format(stringFormated, Fargs...);
       }else{
         stringFormated += c;
       }

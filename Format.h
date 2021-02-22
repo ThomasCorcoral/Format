@@ -7,13 +7,7 @@ namespace fp {
   /**
    * @brief Insert all parameter into a formated string
    */
-/*
-  template<typename T>
-  struct m_is_pointer { static const bool value = false; };
 
-  template<typename T>
-  struct m_is_pointer<T*> { static const bool value = true; };
-*/
   std::string format(const std::string& formatString){
     std::string stringFormated;
     size_t i = 0;
@@ -56,6 +50,12 @@ namespace fp {
             get_the_address << value;
             std::string address =  get_the_address.str();
             stringFormated += address;
+          }else if(type == 's'){
+            if constexpr (std::is_same<T,const char*>::value){
+              stringFormated += value;
+            }else{
+              // ERROR : NOT A STRING !
+            }
           }else{
             // ERROR : NO POINTER REQUIRE BUT POINTER GIVEN
           }
@@ -72,10 +72,12 @@ namespace fp {
               break;
             case 'b':
               // TODO : Check the type typeid ?
-              if(value)
-                stringFormated += "true";
-              else
-                stringFormated += "false";
+              if(std::is_same<T,bool>::value){
+                if(value)
+                  stringFormated += "true";
+                else
+                  stringFormated += "false";
+              }
               break;
             case 's':
               // TODO : Check the type typeid ?

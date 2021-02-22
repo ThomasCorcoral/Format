@@ -69,9 +69,16 @@ TEST(RegularTest, SubstitutionWithPercentS){
 }
 
 TEST(RegularTest, MultipleSubstitutions){
-  auto str = fp::format("So in the end, when someone asks you %s the time, you just say %d, or %f or %x ", "for", 42, 42.424242, 42);
+  auto str = fp::format("So in the end, when someone asks you %s the time, you just say %d, or %f or %x", "for", 42, 42.424242, 42);
   EXPECT_EQ(str, "So in the end, when someone asks you for the time, you just say 42, or 42.424242 or 0x2a");
 }
+/*
+TEST(RegularTest, MultipleSubstitutions2){
+  std::string input_str;
+  input_str = "for";
+  auto str = fp::format("So in the end, when someone asks you %s the time, you just say %d, or %f or %x ", input_str, 42, 42.424242, 42);
+  EXPECT_EQ(str, "So in the end, when someone asks you for the time, you just say 42, or 42.424242 or 0x2a");
+}*/
 
 int main(int argc, char* argv[]) {
   ::testing::InitGoogleTest(&argc, argv);

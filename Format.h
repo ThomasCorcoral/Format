@@ -72,11 +72,10 @@ namespace fp {
               break;
             case 'b':
               // TODO : Check the type typeid ?
-              if(value){
+              if(value)
                 stringFormated += "true";
-              }else{
+              else
                 stringFormated += "false";
-              }
               break;
             case 's':
               // TODO : Check the type typeid ?
@@ -89,13 +88,15 @@ namespace fp {
             case 'p':
               // ERROR : Not a pointer !
               break;
-            case 'x':
+            case 'x':{
               // TODO : Check the type typeid ?
-              /*std::stringstream stream;
+              std::stringstream stream;
               stream << std::hex << value;
               std::string result(stream.str());
-              stringFormated += result;*/
+              stringFormated += "0x";
+              stringFormated += result;
               break;
+            }
             case '%':
               stringFormated += type;
               stringFormated += formatString.substr(i+3,formatString.length());
@@ -110,7 +111,6 @@ namespace fp {
         stringFormated += c;
       }
       i++;
-
     }
     return stringFormated;
   }

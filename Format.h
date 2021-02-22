@@ -52,7 +52,10 @@ namespace fp {
           }
         }else if constexpr (std::is_pointer<T>::value){
           if(type == 'p'){
-            //stringFormated += std::to_string(*value);
+            std::ostringstream get_the_address; 
+            get_the_address << value;
+            std::string address =  get_the_address.str();
+            stringFormated += address;
           }else{
             // ERROR : NO POINTER REQUIRE BUT POINTER GIVEN
           }
@@ -77,7 +80,7 @@ namespace fp {
               break;
             case 's':
               // TODO : Check the type typeid ?
-                stringFormated += value;
+              stringFormated += value;
               break;
             case 'c':
               // TODO : Check the type typeid ?

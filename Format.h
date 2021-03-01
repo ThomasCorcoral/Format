@@ -42,7 +42,8 @@ namespace fp {
           if(type == 'p'){
             stringFormated += "0x0";
           }else{
-
+            // If empty string ?
+            // ERROR : NULL POINTER FIND
           }
         }else if constexpr (std::is_pointer<T>::value){
           if(type == 'p'){
@@ -55,9 +56,11 @@ namespace fp {
               stringFormated += value;
             }else{
               // ERROR : NOT A STRING !
+              throw std::runtime_error(std::string("Error : %s find but the variable isn't a string"));
             }
           }else{
             // ERROR : NO POINTER REQUIRE BUT POINTER GIVEN
+            throw std::runtime_error(std::string("Error : No pointer require but pointer given"));
           }
         }else{
           switch (type){
@@ -67,6 +70,7 @@ namespace fp {
                 stringFormated += std::to_string(value);
               }else{
                 // ERROR : NOT AN INTEGER
+              throw std::runtime_error(std::string("Error : %d or %i find but the variable isn't an integer"));
               }
               break;
             case 'f':
@@ -74,6 +78,7 @@ namespace fp {
                 stringFormated += std::to_string(value);
               }else{
                 // ERROR : NOT A FLOAT
+                throw std::runtime_error(std::string("Error : %f find but the variable isn't a float"));
               }
               break;
             case 'b':
@@ -86,6 +91,7 @@ namespace fp {
                 }
               }else{
                 // ERROR : NOT A BOOLEAN
+                throw std::runtime_error(std::string("Error : %b find but the variable isn't a boolean"));
               }
               break;
             case 's':
@@ -93,6 +99,7 @@ namespace fp {
                 stringFormated += value;
               }else{
                 // ERROR : NOT A STRING
+                throw std::runtime_error(std::string("Error : %s find but the variable isn't a string"));
               }
               break;
             case 'c':
@@ -100,10 +107,12 @@ namespace fp {
                 stringFormated += value;
               }else{
                 // ERROR : NOT A CHAR
+                throw std::runtime_error(std::string("Error : %c find but the variable isn't a char"));
               }
               break;
             case 'p':
               // ERROR : Not a pointer !
+                throw std::runtime_error(std::string("Error : %p find but the variable isn't a pointer"));
               break;
             case 'x':{
               if(std::is_integral<T>::value){
@@ -114,6 +123,7 @@ namespace fp {
                 stringFormated += result;
               }else{
                 // ERROR : NOT AN INTEGER
+                throw std::runtime_error(std::string("Error : %x find but the variable isn't an integer"));
               }
               break;
             }
@@ -122,6 +132,7 @@ namespace fp {
               stringFormated += formatString.substr(i+3,formatString.length());
               return format(stringFormated, value, Fargs...);
             default:
+              throw std::runtime_error(std::string("Error : %") + type + std::string(" find, unknow type"));
               break;
           }
         }
@@ -134,8 +145,5 @@ namespace fp {
     }
     return stringFormated;
   }
-
 }
-
-
 #endif // FP_FORMAT_H

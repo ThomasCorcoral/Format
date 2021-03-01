@@ -12,6 +12,40 @@ namespace my {
   }
 }
 
+TEST(SubjectExample, Test)
+{
+  auto str = fp::format("%s %s!", "Hello", "World");
+  EXPECT_EQ(str, "Hello World!");
+  
+  str = fp::format("The  cake is a lie!");
+  EXPECT_EQ(str, "The  cake is a lie!");
+  
+  str = fp::format("The  Answer is %d", 42);
+  EXPECT_EQ(str, "The  Answer is 42");
+  
+  str = fp::format("Approximation of %s is %f", "Pi", 3.141592);
+  EXPECT_EQ(str, "Approximation of Pi is 3.141592");
+  
+  str = fp::format("%d in  hexadecimal %x", 42, 42);
+  EXPECT_EQ(str, "42 in  hexadecimal 0x2a");
+  
+  str = fp::format("'%c' is the 1st alphabet letter", 'A');
+  EXPECT_EQ(str, "'A' is the 1st alphabet letter");
+  
+  str = fp::format("This  sentence  is %b",false);
+  EXPECT_EQ(str, "This  sentence  is false");
+  
+  my::Foo  foo = { 8 };
+  str = fp::format("%o", foo);
+  EXPECT_EQ(str, "8");
+  
+  str = fp::format("%p", &foo);
+  EXPECT_EQ(str, "0x");
+  
+  str = fp::format("No  substitution: %%i");
+  EXPECT_EQ(str, "No  substitution: %i");
+}
+
 TEST(RegularTest, SimpleNoSubstitution){
   auto str = fp::format("The cake is a lie!");
   EXPECT_EQ(str, "The cake is a lie!");
@@ -72,6 +106,10 @@ TEST(RegularTest, SubstitutionWithMultiplePercents){
   auto str = fp::format("If you want to print 42 on a computer, you need to use %%i or %%d");
   EXPECT_EQ(str, "If you want to print 42 on a computer, you need to use %i or %d");
 }
+TEST(RegularTest, SubstitutionWithMultiplePercentsTheSequel){
+  auto str = fp::format("But be careful not to use %%%i or %%%d, you just need one %");
+  EXPECT_EQ(str, "But be careful not to use %%i or %%d, you just need one %");
+}
 
 TEST(RegularTest, MultipleSubstitutions){
   auto str = fp::format("So in the end, when someone asks you %s the time, you just say %d, or %f or %x", "for", 42, 42.424242, 42);
@@ -88,6 +126,16 @@ TEST(RegularTest, MultipleSubstitutions3){
   const char* input_str = "for";
   auto str = fp::format("So in the end, when someone asks you %s the time, you just say %d, or %f or %x", input_str, 42, 42.424242, 42);
   EXPECT_EQ(str, "So in the end, when someone asks you for the time, you just say 42, or 42.424242 or 0x2a");
+}
+
+TEST(RegularTest, MultipleSubstitutionsWithMultiplePercents){
+  auto str = fp::format("So in the end, when someone asks you %s the time, you just say %d with %%i or %%d, %f with %%f or %x with %%x", "for", 42, 42.424242, 42);
+  EXPECT_EQ(str, "So in the end, when someone asks you for the time, you just say 42 with %i or %d, 42.424242 with %f or 0x2a with %x");
+}
+
+TEST(PercentI, goodInt)
+{
+
 }
 
 int main(int argc, char* argv[]) {

@@ -46,8 +46,9 @@ namespace fp {
         if constexpr (std::is_null_pointer<T>::value){
           if(type == 'p'){
             stringFormated += "0x0";
-          }else if(type == "s"){
+          }else if(type == 's'){
             stringFormated += "nil";
+          }
           else{
             // ERROR : NULL pointer find
             throw std::runtime_error(std::string("Error : Null pointer find"));

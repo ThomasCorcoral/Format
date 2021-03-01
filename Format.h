@@ -46,16 +46,18 @@ namespace fp {
         if constexpr (std::is_null_pointer<T>::value){
           if(type == 'p'){
             stringFormated += "0x0";
-          }else{
-            // If empty string ?
-            // ERROR : NULL POINTER FIND
+          }else if(type == "s"){
+            stringFormated += "nil";
+          else{
+            // ERROR : NULL pointer find
+            throw std::runtime_error(std::string("Error : Null pointer find"));
           }
         }else if(type == 'o'){
-          // Small cond to check if type is really unknow
+          // Small condition to check if type is really unknow
           if constexpr (std::is_pointer<T>::value || std::is_integral<T>::value || std::is_floating_point<T>::value || std::is_same<T,std::string>::value || std::is_same<T,bool>::value || std::is_same<T,char>::value){
             throw std::runtime_error(std::string("Error : %o was found, but the variable is supported"));
           }else{ // Check if to_string exsists
-            //ADL
+            //ADL used in order to call functions defined in the namespace of the template argument.
             using std::to_string;
             stringFormated += to_string(value);
           }

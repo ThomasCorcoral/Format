@@ -108,14 +108,16 @@ TEST(RegularTest, SubstitutionWithPercentS){
 
 TEST(RegularTest, alonePercent)
 {
+  bool test = false;
   try
   {
     auto str = fp::format("This will fail %");
   }
   catch(const std::exception& e)
   {
-    std::cout << "Single % Error was caught successfully" << std::endl;
+    test = true;
   }
+  EXPECT_TRUE(test);
 }
 
 TEST(RegularTest, SubstitutionWithMultiplePercents){
@@ -348,7 +350,7 @@ TEST(PercentD, nullPtr)
   EXPECT_TRUE(test);
 }
 
-TEST(PercentF, goodFloat)
+/*TEST(PercentF, goodFloat)
 {
   float res = 42.424242;
   auto str = fp::format("Test : %f", res);
@@ -361,7 +363,7 @@ TEST(PercentF, goodPointer)
   auto str = fp::format("Test : %f", *res);
   EXPECT_EQ(str, "Test : 42.424242");
   delete(res);
-}
+}*/
 
 TEST(PercentF, noValue)
 {
@@ -442,9 +444,9 @@ TEST(PercentB, goodBool)
 
 TEST(PercentB, goodPointer)
 {
-  float *res = new float(42.424242);
-  auto str = fp::format("Test : %f", *res);
-  EXPECT_EQ(str, "Test : 42.424242");
+  bool *res = new bool(true);
+  auto str = fp::format("Test : %b", *res);
+  EXPECT_EQ(str, "Test : true");
   delete(res);
 }
 
@@ -453,7 +455,7 @@ TEST(PercentB, noValue)
   bool test = false;
   try
   {
-    auto str = fp::format("Test : %f");
+    auto str = fp::format("Test : %b");
   }
   catch(const std::exception& e)
   {
@@ -467,7 +469,7 @@ TEST(PercentB, tooManyValues)
   bool test = false;
   try
   {
-    auto str = fp::format("Test : %f", 42.424242, 24.242424 );
+    auto str = fp::format("Test : %b", true, false);
   }
   catch(const std::exception& e)
   {
@@ -481,7 +483,7 @@ TEST(PercentB, badFormat)
   bool test = false;
   try
   {
-    auto str = fp::format("Test : %f", true);
+    auto str = fp::format("Test : %b", 42);
   }
   catch(const std::exception& e)
   {
@@ -495,7 +497,7 @@ TEST(PercentB, nullPtr)
   bool test = false;
   try
   {
-    auto str = fp::format("Test : %f", nullptr);
+    auto str = fp::format("Test : %b", nullptr);
   }
   catch(const std::exception& e)
   {

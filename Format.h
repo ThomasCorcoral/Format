@@ -15,11 +15,12 @@ namespace fp {
       char c = formatString[i];
       if(c == '%'){
         if(formatString[i+1] == '%'){
-          stringFormated += c;
+          stringFormated += formatString[i+1];
           i++;
         }else{
-          // TODO : Throw exception because no more arguments
-          stringFormated += c; // To remove
+          // ERROR : no more arguments
+          std::cout << stringFormated << '\n';
+          throw std::runtime_error(std::string("Error : %") + formatString[i+1] + std::string("was found, but there is no more argument"));
         }
       }else{
         stringFormated += c;
@@ -46,7 +47,7 @@ namespace fp {
           if(std::is_pointer<T>::value || std::is_integral<T>::value || std::is_floating_point<T>::value || std::is_same<T,std::string>::value || std::is_same<T,bool>::value || std::is_same<T,char>::value){
             throw std::runtime_error(std::string("Error : %o was found, but the variable is supported"));
           }else{ // Check if to_string exsists
-            
+            //ADL
           }
         }*/
         if constexpr (std::is_null_pointer<T>::value){

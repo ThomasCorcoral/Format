@@ -38,9 +38,13 @@ TEST(SubjectExample, Test)
   my::Foo  foo = { 8 };
   str = fp::format("%o", foo);
   EXPECT_EQ(str, "8");
+
+  std::ostringstream get_the_address; 
+  get_the_address << &foo;
+  std::string address =  get_the_address.str(); 
   
   str = fp::format("%p", &foo);
-  EXPECT_EQ(str, "0x");
+  EXPECT_EQ(str, address);
   
   str = fp::format("No  substitution: %%i");
   EXPECT_EQ(str, "No  substitution: %i");

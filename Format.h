@@ -42,20 +42,22 @@ namespace fp {
 
         bool escape = false;
         char type = formatString[i+1];
-        /*if constexpr (type == 'o'){
-          // Small cond to check if type is really unknow
-          if(std::is_pointer<T>::value || std::is_integral<T>::value || std::is_floating_point<T>::value || std::is_same<T,std::string>::value || std::is_same<T,bool>::value || std::is_same<T,char>::value){
-            throw std::runtime_error(std::string("Error : %o was found, but the variable is supported"));
-          }else{ // Check if to_string exsists
-            //ADL
-          }
-        }*/
+        
         if constexpr (std::is_null_pointer<T>::value){
           if(type == 'p'){
             stringFormated += "0x0";
           }else{
             // If empty string ?
             // ERROR : NULL POINTER FIND
+          }
+        }else if(type == 'o'){
+          // Small cond to check if type is really unknow
+          if constexpr (std::is_pointer<T>::value || std::is_integral<T>::value || std::is_floating_point<T>::value || std::is_same<T,std::string>::value || std::is_same<T,bool>::value || std::is_same<T,char>::value){
+            throw std::runtime_error(std::string("Error : %o was found, but the variable is supported"));
+          }else{ // Check if to_string exsists
+            //ADL
+            using std::to_string;
+            stringFormated += to_string(value);
           }
         }else if constexpr (std::is_pointer<T>::value){
           if(type == 'p'){

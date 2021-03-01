@@ -102,13 +102,26 @@ TEST(RegularTest, SubstitutionWithPercentS){
   EXPECT_EQ(str, "So yeah, 42 is the universal answer");
 }
 
+TEST(RegularTest, alonePercent)
+{
+  try
+  {
+    auto str = fp::format("This will fail %");
+  }
+  catch(const std::exception& e)
+  {
+    std::cout << "Single % Error was caught successfully" << std::endl;
+  }
+}
+
 TEST(RegularTest, SubstitutionWithMultiplePercents){
   auto str = fp::format("If you want to print 42 on a computer, you need to use %%i or %%d");
   EXPECT_EQ(str, "If you want to print 42 on a computer, you need to use %i or %d");
 }
+
 TEST(RegularTest, SubstitutionWithMultiplePercentsTheSequel){
-  auto str = fp::format("But be careful not to use %%%i or %%%d, you just need one %");
-  EXPECT_EQ(str, "But be careful not to use %%i or %%d, you just need one %");
+  auto str = fp::format("But be careful not to use %%%i or %%%d, you just need one %%", 42, 42);
+  EXPECT_EQ(str, "But be careful not to use %42 or %42, you just need one %");
 }
 
 TEST(RegularTest, MultipleSubstitutions){
@@ -135,7 +148,160 @@ TEST(RegularTest, MultipleSubstitutionsWithMultiplePercents){
 
 TEST(PercentI, goodInt)
 {
+  int res = 42;
+  auto str = fp::format("Test : %i", res);
+  EXPECT_EQ(str, "Test : 42");
+}
 
+TEST(PercentI, goodLong)
+{
+  long res = 42;
+  auto str = fp::format("Test : %i", res);
+  EXPECT_EQ(str, "Test : 42");
+}
+
+TEST(PercentI, goodConst)
+{
+  const int res = 42;
+  auto str = fp::format("Test : %i", res);
+  EXPECT_EQ(str, "Test : 42");
+}
+
+TEST(PercentI, goodSigned)
+{
+  signed int res = -42;
+  auto str = fp::format("Test : %i", res);
+  EXPECT_EQ(str, "Test : -42");
+}
+
+TEST(PercentI, goodUnsigned)
+{
+  unsigned int res = 42;
+  auto str = fp::format("Test : %i", res);
+  EXPECT_EQ(str, "Test : 42");
+}
+
+TEST(PercentI, goodPointer)
+{
+  int* res = new int(42);
+  auto str = fp::format("Test : %i", *res);
+  EXPECT_EQ(str, "Test : 42");
+  delete(res);
+}
+
+TEST(PercentI, noValue)
+{
+  try
+  {
+    auto str = fp::format("Test : %i");
+  }
+  catch(const std::exception& e)
+  {
+    std::cout << "noValue Error for %i was caught successfully" << std::endl;
+  }
+}
+
+TEST(PercentI, tooManyValues)
+{
+  try
+  {
+    auto str = fp::format("Test : %i");
+  }
+  catch(const std::exception& e)
+  {
+    std::cout << "tooManyValues Error for %i was caught successfully" << std::endl;
+  }
+}
+
+TEST(PercentI, badFormat)
+{
+  try
+  {
+    auto str = fp::format("Test : %i", 42.424242);
+  }
+  catch(const std::exception& e)
+  {
+    std::cout << "badFormat Error for %i was caught successfully" << std::endl;
+  }
+}
+
+TEST(PercentD, goodInt)
+{
+  int res = 42;
+  auto str = fp::format("Test : %d", res);
+  EXPECT_EQ(str, "Test : 42");
+}
+
+TEST(PercentD, goodLong)
+{
+  long res = 42;
+  auto str = fp::format("Test : %d", res);
+  EXPECT_EQ(str, "Test : 42");
+}
+
+TEST(PercentD, goodConst)
+{
+  const int res = 42;
+  auto str = fp::format("Test : %d", res);
+  EXPECT_EQ(str, "Test : 42");
+}
+
+TEST(PercentD, goodSigned)
+{
+  signed int res = -42;
+  auto str = fp::format("Test : %d", res);
+  EXPECT_EQ(str, "Test : -42");
+}
+
+TEST(PercentD, goodUnsigned)
+{
+  unsigned int res = 42;
+  auto str = fp::format("Test : %d", res);
+  EXPECT_EQ(str, "Test : 42");
+}
+
+TEST(PercentD, goodPointer)
+{
+  int *res = new int(42);
+  auto str = fp::format("Test : %d", *res);
+  EXPECT_EQ(str, "Test : 42");
+  delete(res);
+}
+
+TEST(PercentD, noValue)
+{
+  try
+  {
+    auto str = fp::format("Test : %d");
+  }
+  catch(const std::exception& e)
+  {
+    std::cout << "noValue Error for %d was caught successfully" << std::endl;
+  }
+}
+
+TEST(PercentD, tooManyValues)
+{
+  try
+  {
+    auto str = fp::format("Test : %d");
+  }
+  catch(const std::exception& e)
+  {
+    std::cout << "tooManyValues Error for %d was caught successfully" << std::endl;
+  }
+}
+
+TEST(PercentD, badFormat)
+{
+  try
+  {
+    auto str = fp::format("Test : %d", 42.424242);
+  }
+  catch(const std::exception& e)
+  {
+    std::cout << "badFormat Error for %d was caught successfully" << std::endl;
+  }
 }
 
 int main(int argc, char* argv[]) {

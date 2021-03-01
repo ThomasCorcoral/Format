@@ -15,11 +15,12 @@ namespace fp {
       char c = formatString[i];
       if(c == '%'){
         if(formatString[i+1] == '%'){
-          stringFormated += c;
+          stringFormated += formatString[i+1];
           i++;
         }else{
-          // TODO : Throw exception because no more arguments
-          stringFormated += c; // To remove
+          // ERROR : no more arguments
+          std::cout << stringFormated << '\n';
+          throw std::runtime_error(std::string("Error : %") + formatString[i+1] + std::string("was found, but there is no more argument"));
         }
       }else{
         stringFormated += c;
@@ -33,11 +34,22 @@ namespace fp {
   std::string format(const std::string& formatString, T value, Targs ... Fargs) {
     std::string stringFormated;
     size_t i = 0;
+    // browse the strings
     while(i < formatString.length()){
       char c = formatString[i];
-
+      // check if the char is a %, if not just print it in the new string
       if(c == '%'){
+
+        bool escape = false;
         char type = formatString[i+1];
+        /*if constexpr (type == 'o'){
+          // Small cond to check if type is really unknow
+          if(std::is_pointer<T>::value || std::is_integral<T>::value || std::is_floating_point<T>::value || std::is_same<T,std::string>::value || std::is_same<T,bool>::value || std::is_same<T,char>::value){
+            throw std::runtime_error(std::string("Error : %o was found, but the variable is supported"));
+          }else{ // Check if to_string exsists
+            //ADL
+          }
+        }*/
         if constexpr (std::is_null_pointer<T>::value){
           if(type == 'p'){
             stringFormated += "0x0";
@@ -47,19 +59,19 @@ namespace fp {
           }
         }else if constexpr (std::is_pointer<T>::value){
           if(type == 'p'){
-            std::ostringstream get_the_address; 
-            get_the_address << value;
-            std::string address =  get_the_address.str();
-            stringFormated += address;
+            std::ostringstream get_the_address; // init the stream
+            get_the_address << value; // Put the adress of the pointer in the stream
+            std::string address =  get_the_address.str(); // convert the stream into a string
+            stringFormated += address; // add the string to our new one
           }else if(type == 's'){
             if constexpr (std::is_same<T,const char*>::value){
               stringFormated += value;
             }else{
-              // ERROR : NOT A STRING !
+              // ERROR : Not a string
               throw std::runtime_error(std::string("Error : %s was found, but the variable isn't a string"));
             }
           }else{
-            // ERROR : NO POINTER REQUIRED BUT POINTER GIVEN
+            // ERROR : No pointer required 
             throw std::runtime_error(std::string("Error : No pointer was required, but a pointer was given"));
           }
         }else{
@@ -69,7 +81,7 @@ namespace fp {
               if constexpr (std::is_integral<T>::value){
                 stringFormated += std::to_string(value);
               }else{
-                // ERROR : NOT AN INTEGER
+                // ERROR : Not an integer
               throw std::runtime_error(std::string("Error : %d or %i was found, but the variable isn't an integer"));
               }
               break;
@@ -77,20 +89,20 @@ namespace fp {
               if constexpr (std::is_floating_point<T>::value){
                 stringFormated += std::to_string(value);
               }else{
-                // ERROR : NOT A FLOAT
+                // ERROR : Not a float
                 throw std::runtime_error(std::string("Error : %f was found, but the variable isn't a float"));
               }
               break;
             case 'b':
               if constexpr (std::is_same<T,bool>::value){
-                if(value){
+                if(value){// Just evaluate the value as it's a boolean
                   stringFormated += "true";
                 }
                 else{
                   stringFormated += "false";
                 }
               }else{
-                // ERROR : NOT A BOOLEAN
+                // ERROR : Not a boolean
                 throw std::runtime_error(std::string("Error : %b was found, but the variable isn't a boolean"));
               }
               break;
@@ -98,7 +110,7 @@ namespace fp {
               if constexpr (std::is_same<T,std::string>::value){
                 stringFormated += value;
               }else{
-                // ERROR : NOT A STRING
+                // ERROR : Not a string
                 throw std::runtime_error(std::string("Error : %s was found, but the variable isn't a string"));
               }
               break;
@@ -106,7 +118,7 @@ namespace fp {
               if constexpr (std::is_same<T,char>::value){
                 stringFormated += value;
               }else{
-                // ERROR : NOT A CHAR
+                // ERROR : Not a char
                 throw std::runtime_error(std::string("Error : %c was found, but the variable isn't a char"));
               }
               break;
@@ -122,25 +134,30 @@ namespace fp {
                 stringFormated += "0x";
                 stringFormated += result;
               }else{
-                // ERROR : NOT AN INTEGER
+                // ERROR : Not an integral
                 throw std::runtime_error(std::string("Error : %x was found, but the variable isn't an integer"));
               }
               break;
             }
-            case '%':
+            case '%': // escape char
+              stringFormated += c;
               stringFormated += type;
-              stringFormated += formatString.substr(i+3,formatString.length());
-              return format(stringFormated, value, Fargs...);
+              i++;
+              escape = true;
+              break;
             default:
               throw std::runtime_error(std::string("Error : %") + type + std::string(" was found, but the type is unknown"));
               break;
           }
         }
-        stringFormated += formatString.substr(i+2,formatString.length());
-        return format(stringFormated, Fargs...);
+        if(!escape){
+          stringFormated += formatString.substr(i+2,formatString.length());
+          return format(stringFormated, Fargs...);
+        }
       }else{
         stringFormated += c;
       }
+      // increase our counter
       i++;
     }
     return stringFormated;

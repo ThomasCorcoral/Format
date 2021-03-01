@@ -195,38 +195,58 @@ TEST(PercentI, goodPointer)
 
 TEST(PercentI, noValue)
 {
+  bool test = false;
   try
   {
     auto str = fp::format("Test : %i");
   }
   catch(const std::exception& e)
   {
-    std::cout << "noValue Error for %i was caught successfully" << std::endl;
+    test = true;
   }
+  EXPECT_TRUE(test);
 }
 
 TEST(PercentI, tooManyValues)
 {
+  bool test = false;
   try
   {
-    auto str = fp::format("Test : %i");
+    auto str = fp::format("Test : %i", 42, 24);
   }
   catch(const std::exception& e)
   {
-    std::cout << "tooManyValues Error for %i was caught successfully" << std::endl;
+    test = true;
   }
+  EXPECT_TRUE(test);
 }
 
 TEST(PercentI, badFormat)
 {
+  bool test = false;
   try
   {
     auto str = fp::format("Test : %i", 42.424242);
   }
   catch(const std::exception& e)
   {
-    std::cout << "badFormat Error for %i was caught successfully" << std::endl;
+    test = true;
   }
+  EXPECT_TRUE(test);
+}
+
+TEST(PercentI, nullPtr)
+{
+  bool test = false;
+  try
+  {
+    auto str = fp::format("Test : %i", nullptr);
+  }
+  catch(const std::exception& e)
+  {
+    test = true;
+  }
+  EXPECT_TRUE(test);
 }
 
 TEST(PercentD, goodInt)
@@ -274,38 +294,214 @@ TEST(PercentD, goodPointer)
 
 TEST(PercentD, noValue)
 {
+  bool test = false;
   try
   {
     auto str = fp::format("Test : %d");
   }
   catch(const std::exception& e)
   {
-    std::cout << "noValue Error for %d was caught successfully" << std::endl;
+    test = true;
   }
+  EXPECT_TRUE(test);
 }
 
 TEST(PercentD, tooManyValues)
 {
+  bool test = false;
   try
   {
-    auto str = fp::format("Test : %d");
+    auto str = fp::format("Test : %d", 42, 24);
   }
   catch(const std::exception& e)
   {
-    std::cout << "tooManyValues Error for %d was caught successfully" << std::endl;
+    test = true;
   }
+  EXPECT_TRUE(test);
 }
 
 TEST(PercentD, badFormat)
 {
+  bool test = false;
   try
   {
     auto str = fp::format("Test : %d", 42.424242);
   }
   catch(const std::exception& e)
   {
-    std::cout << "badFormat Error for %d was caught successfully" << std::endl;
+    test = true;
   }
+  EXPECT_TRUE(test);
+}
+
+TEST(PercentD, nullPtr)
+{
+  bool test = false;
+  try
+  {
+    auto str = fp::format("Test : %d", nullptr);
+  }
+  catch(const std::exception& e)
+  {
+    test = true;
+  }
+  EXPECT_TRUE(test);
+}
+
+TEST(PercentF, goodFloat)
+{
+  float res = 42.424242;
+  auto str = fp::format("Test : %f", res);
+  EXPECT_EQ(str, "Test : 42.424242");
+}
+
+TEST(PercentF, goodPointer)
+{
+  float *res = new float(42.424242);
+  auto str = fp::format("Test : %f", *res);
+  EXPECT_EQ(str, "Test : 42.424242");
+  delete(res);
+}
+
+TEST(PercentF, noValue)
+{
+  bool test = false;
+  try
+  {
+    auto str = fp::format("Test : %f");
+  }
+  catch(const std::exception& e)
+  {
+    test = true;
+  }
+  EXPECT_TRUE(test);
+}
+
+TEST(PercentF, tooManyValues)
+{
+  bool test = false;
+  try
+  {
+    auto str = fp::format("Test : %f", 42.424242, 24.242424 );
+  }
+  catch(const std::exception& e)
+  {
+    test = true;
+  }
+  EXPECT_TRUE(test);
+}
+
+TEST(PercentF, badFormat1)
+{
+  bool test = false;
+  try
+  {
+    auto str = fp::format("Test : %f", true);
+  }
+  catch(const std::exception& e)
+  {
+    test = true;
+  }
+  EXPECT_TRUE(test);
+}
+
+TEST(PercentF, badFormat2)
+{
+  bool test = false;
+  try
+  {
+    auto str = fp::format("Test : %f", true);
+  }
+  catch(const std::exception& e)
+  {
+    test = true;
+  }
+  EXPECT_TRUE(test);
+}
+
+TEST(PercentF, nullPtr)
+{
+  bool test = false;
+  try
+  {
+    auto str = fp::format("Test : %f", nullptr);
+  }
+  catch(const std::exception& e)
+  {
+    test = true;
+  }
+  EXPECT_TRUE(test);
+}
+
+TEST(PercentB, goodBool)
+{
+  bool res = true;
+  auto str = fp::format("Test : %b", res);
+  EXPECT_EQ(str, "Test : true");
+}
+
+TEST(PercentB, goodPointer)
+{
+  float *res = new float(42.424242);
+  auto str = fp::format("Test : %f", *res);
+  EXPECT_EQ(str, "Test : 42.424242");
+  delete(res);
+}
+
+TEST(PercentB, noValue)
+{
+  bool test = false;
+  try
+  {
+    auto str = fp::format("Test : %f");
+  }
+  catch(const std::exception& e)
+  {
+    test = true;
+  }
+  EXPECT_TRUE(test);
+}
+
+TEST(PercentB, tooManyValues)
+{
+  bool test = false;
+  try
+  {
+    auto str = fp::format("Test : %f", 42.424242, 24.242424 );
+  }
+  catch(const std::exception& e)
+  {
+    test = true;
+  }
+  EXPECT_TRUE(test);
+}
+
+TEST(PercentB, badFormat)
+{
+  bool test = false;
+  try
+  {
+    auto str = fp::format("Test : %f", true);
+  }
+  catch(const std::exception& e)
+  {
+    test = true;
+  }
+  EXPECT_TRUE(test);
+}
+
+TEST(PercentB, nullPtr)
+{
+  bool test = false;
+  try
+  {
+    auto str = fp::format("Test : %f", nullptr);
+  }
+  catch(const std::exception& e)
+  {
+    test = true;
+  }
+  EXPECT_TRUE(test);
 }
 
 int main(int argc, char* argv[]) {

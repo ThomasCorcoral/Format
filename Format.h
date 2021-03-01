@@ -165,7 +165,8 @@ namespace fp {
       // increase our counter
       i++;
     }
-    return stringFormated;
+    throw std::runtime_error(std::string("Error : Too many arguments"));
+    // return stringFormated;
   }
 }
 #endif // FP_FORMAT_H

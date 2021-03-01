@@ -19,7 +19,6 @@ namespace fp {
           i++;
         }else{
           // ERROR : no more arguments
-          std::cout << stringFormated << '\n';
           throw std::runtime_error(std::string("Error : %") + formatString[i+1] + std::string("was found, but there is no more argument"));
         }
       }else{
